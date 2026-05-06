@@ -103,41 +103,41 @@ export default function Header() {
             </button>
 
             <div className="relative bg-gray-900 dark:bg-black h-48 flex items-center justify-center overflow-hidden">
-              <img src="/2dlls.jpg" alt="Premium" className="w-full h-full object-cover opacity-80" />
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-6">
-                <h2 className="text-white text-2xl font-black tracking-tight">{t.premiumTitle}</h2>
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500 opacity-30" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.15),transparent_70%)]" />
+              <div className="relative">
+                <h2 className="text-white text-3xl font-black tracking-tight gradient-text">{t.premiumTitle}</h2>
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
-              <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700">
-                <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
-                  <Image className="w-5 h-5 text-orange-500" strokeWidth={2} />
+            <div className="p-7 space-y-7">
+              <div className="flex items-center gap-4 p-5 bg-gray-50 dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700">
+                <div className="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                  <Image className="w-6 h-6 text-orange-500" strokeWidth={2} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-gray-900 dark:text-white">{t.premiumFree}</p>
-                  <p className="text-xs text-gray-500 dark:text-slate-400">{t.premiumFreeDesc}</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">{t.premiumFree}</p>
+                  <p className="text-sm text-gray-500 dark:text-slate-400">{t.premiumFreeDesc}</p>
                 </div>
               </div>
 
               <p className="text-center text-sm font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider">Upgrade</p>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 border border-gray-200 dark:border-slate-700 text-center">
-                  <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">{t.premiumMonthly}</div>
-                  <img src="/2dlls.jpg" alt="$2" className="w-full max-w-[120px] mx-auto rounded-lg shadow mb-2" />
-                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">{t.premiumMonthlyDesc}</p>
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-500/20">
+              <div className="grid grid-cols-2 gap-5">
+                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-5 border border-gray-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">{t.premiumMonthly}</div>
+                  <img src="/2dlls.jpg" alt="$2" className="w-full max-w-[140px] mx-auto rounded-lg shadow mb-3" />
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">{t.premiumMonthlyDesc}</p>
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-500/20">
                     {t.premiumBtnMonthly}
                   </button>
                 </div>
-                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 border-2 border-purple-500 dark:border-purple-400 text-center relative">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Best Value</div>
-                  <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1">{t.premiumLifetime}</div>
-                  <div className="text-3xl font-black text-gray-900 dark:text-white mb-1">{t.premiumLifetimePrice}</div>
-                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">{t.premiumLifetimeDesc}</p>
-                  <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-purple-500/20">
+                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-5 border-2 border-purple-500 dark:border-purple-400 text-center relative">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-[11px] font-bold px-3 py-0.5 rounded-full uppercase">Best Value</div>
+                  <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2">{t.premiumLifetime}</div>
+                  <div className="text-4xl font-black text-gray-900 dark:text-white mb-1">{t.premiumLifetimePrice}</div>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">{t.premiumLifetimeDesc}</p>
+                  <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-xl text-sm font-bold transition-all shadow-lg shadow-purple-500/20">
                     {t.premiumBtnLifetime}
                   </button>
                 </div>
