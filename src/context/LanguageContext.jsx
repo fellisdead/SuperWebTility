@@ -74,7 +74,14 @@ const translations = {
     s2iSize: "Output Size", s2iCustom: "Custom", s2iAutoSize: "Uses the SVG viewBox dimensions",
     s2iConverting: "Converting...", s2iResult: "Result", s2iPreviewEmpty: "Paste SVG code to see a preview",
     s2iEmpty: "Paste some SVG code first.",
-    cardTitle13: "SVG to Image", cardDesc13: "Convert SVG to any format"
+    cardTitle13: "SVG to Image", cardDesc13: "Convert SVG to any format",
+    // Image to SVG
+    cardTitle14: "Image to SVG", cardDesc14: "Convert any image to SVG",
+    i2sTitle: "Image to SVG", i2sDesc: "Convert any image to an SVG file. Drop a PNG, JPEG, or WebP image and get a clean, embeddable SVG document. Everything runs in your browser.",
+    i2sInput: "Upload Image", i2sDrop: "Drop an image or click to browse",
+    i2sDownload: "Download SVG", i2sCopy: "Copy SVG", i2sCopied: "Copied!",
+    i2sSvgCode: "SVG Code", i2sPreviewEmpty: "Upload an image to see the SVG code",
+    i2sInvalidImg: "Failed to load image. Please try a different file."
   },
   ES: {
     navTools: "Herramientas", navFeatures: "Funciones", navPricing: "Precios", navLogin: "Entrar", btnPremium: "Obtener Premium",
@@ -145,7 +152,14 @@ const translations = {
     s2iSize: "Tamaño de Salida", s2iCustom: "Personalizado", s2iAutoSize: "Usa las dimensiones del viewBox",
     s2iConverting: "Convirtiendo...", s2iResult: "Resultado", s2iPreviewEmpty: "Pega código SVG para ver la vista previa",
     s2iEmpty: "Pega código SVG primero.",
-    cardTitle13: "SVG a Imagen", cardDesc13: "Convierte SVG a cualquier formato"
+    cardTitle13: "SVG a Imagen", cardDesc13: "Convierte SVG a cualquier formato",
+    // Image to SVG
+    cardTitle14: "Imagen a SVG", cardDesc14: "Convierte cualquier imagen a SVG",
+    i2sTitle: "Imagen a SVG", i2sDesc: "Convierte cualquier imagen a un archivo SVG. Suelta una imagen PNG, JPEG o WebP y obtén un documento SVG limpio e incrustable. Todo se ejecuta en tu navegador.",
+    i2sInput: "Subir Imagen", i2sDrop: "Suelta una imagen o haz clic para buscar",
+    i2sDownload: "Descargar SVG", i2sCopy: "Copiar SVG", i2sCopied: "¡Copiado!",
+    i2sSvgCode: "Código SVG", i2sPreviewEmpty: "Sube una imagen para ver el código SVG",
+    i2sInvalidImg: "Error al cargar la imagen. Prueba con otro archivo."
   },
   JA: {
     navTools: "ツール", navFeatures: "機能", navPricing: "料金", navLogin: "ログイン", btnPremium: "プレミアムを取得",
@@ -216,7 +230,14 @@ const translations = {
     s2iSize: "出力サイズ", s2iCustom: "カスタム", s2iAutoSize: "viewBoxの寸法を使用",
     s2iConverting: "変換中...", s2iResult: "結果", s2iPreviewEmpty: "SVGコードを貼り付けてプレビューを表示",
     s2iEmpty: "最初にSVGコードを貼り付けてください。",
-    cardTitle13: "SVGから画像", cardDesc13: "SVGを任意の形式に変換"
+    cardTitle13: "SVGから画像", cardDesc13: "SVGを任意の形式に変換",
+    // Image to SVG
+    cardTitle14: "画像からSVG", cardDesc14: "任意の画像をSVGに変換",
+    i2sTitle: "画像からSVG", i2sDesc: "画像をSVGファイルに変換します。PNG、JPEG、WebP画像をドロップすると、クリーンで埋め込み可能なSVGドキュメントを取得できます。すべてブラウザ内で実行されます。",
+    i2sInput: "画像をアップロード", i2sDrop: "画像をドロップするかクリックして参照",
+    i2sDownload: "SVGをダウンロード", i2sCopy: "SVGをコピー", i2sCopied: "コピーしました！",
+    i2sSvgCode: "SVGコード", i2sPreviewEmpty: "画像をアップロードしてSVGコードを表示",
+    i2sInvalidImg: "画像の読み込みに失敗しました。別のファイルをお試しください。"
   }
 };
 
