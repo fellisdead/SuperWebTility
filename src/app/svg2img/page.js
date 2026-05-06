@@ -88,9 +88,18 @@ export default function Svg2Img() {
   const textareaRef = useRef(null);
   const svgBlobUrlRef = useRef(null);
   const fileInputRef = useRef(null);
+  const magickInitRef = useRef(false);
 
   // ── ImageMagick WASM init ──
   useEffect(() => {
+    if (magickInitRef.current) return;
+    magickInitRef.current = true;
+
+    if (window.__magick && window.__magick.ImageMagick) {
+      setMagickReady(true);
+      return;
+    }
+
     const onReady = () => setMagickReady(true);
     const onError = (e) => setErrorMsg('Engine error: ' + (e.detail || 'unknown'));
     window.addEventListener('magick-ready', onReady);

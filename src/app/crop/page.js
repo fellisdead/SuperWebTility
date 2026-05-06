@@ -23,22 +23,17 @@ export default function Crop() {
   const [cropW, setCropW] = useState(300);
   const [cropH, setCropH] = useState(200);
   const [resultUrl, setResultUrl] = useState(null);
-
-  const imgRef = useRef(null);
-  const containerRef = useRef(null);
-  const dragging = useRef(false);
-  const resizing = useRef(false);
-  const resizeEdge = useRef(null);
-  const dragger = useRef({ ox: 0, oy: 0 });
-  const displayLayoutRef = useRef(displayLayout);
-  const imgNaturalRef = useRef(imgNatural);
-  const cropRef = useRef(crop);
-
-  useEffect(() => { displayLayoutRef.current = displayLayout; }, [displayLayout]);
-  useEffect(() => { imgNaturalRef.current = imgNatural; }, [imgNatural]);
-  useEffect(() => { cropRef.current = crop; }, [crop]);
+  const magickInitRef = useRef(false);
 
   useEffect(() => {
+    if (magickInitRef.current) return;
+    magickInitRef.current = true;
+
+    if (window.__magick && window.__magick.ImageMagick) {
+      setMagickReady(true);
+      return;
+    }
+
     const onReady = () => setMagickReady(true);
     const onError = (e) => setErrorMsg('Error motor: ' + (e.detail || 'desconocido'));
     window.addEventListener('magick-ready', onReady);
@@ -60,10 +55,6 @@ export default function Crop() {
       }
     `;
     document.head.appendChild(script);
-    return () => {
-      window.removeEventListener('magick-ready', onReady);
-      window.removeEventListener('magick-error', onError);
-    };
   }, []);
 
   const handleFile = (e) => {

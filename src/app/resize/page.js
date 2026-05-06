@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, X, Loader2, Download, Lock, Unlock, Maximize2 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import JSZip from 'jszip';
@@ -41,8 +41,17 @@ export default function Resize() {
   const [workspaceVisible, setWorkspaceVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const [refDims, setRefDims] = useState({ w: 0, h: 0 });
+  const magickInitRef = useRef(false);
 
   useEffect(() => {
+    if (magickInitRef.current) return;
+    magickInitRef.current = true;
+
+    if (window.__magick && window.__magick.ImageMagick) {
+      setMagickReady(true);
+      return;
+    }
+
     const onReady = () => setMagickReady(true);
     const onError = (e) => setErrorMsg('Error motor: ' + (e.detail || 'desconocido'));
     window.addEventListener('magick-ready', onReady);
@@ -65,11 +74,6 @@ export default function Resize() {
       }
     `;
     document.head.appendChild(script);
-
-    return () => {
-      window.removeEventListener('magick-ready', onReady);
-      window.removeEventListener('magick-error', onError);
-    };
   }, []);
 
   const parsePixels = (str) => {

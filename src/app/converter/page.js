@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, X, Zap, Loader2, CheckCircle, Download } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import JSZip from 'jszip';
@@ -13,9 +13,17 @@ export default function Converter() {
   const [processing, setProcessing] = useState(false);
   const [workspaceVisible, setWorkspaceVisible] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
+  const magickInitRef = useRef(false);
 
   useEffect(() => {
-    // Listen for the ready event dispatched by the inline module script
+    if (magickInitRef.current) return;
+    magickInitRef.current = true;
+
+    if (window.__magick && window.__magick.ImageMagick) {
+      setMagickReady(true);
+      return;
+    }
+
     const onReady = () => setMagickReady(true);
     const onError = (e) => setErrorMsg('Error motor: ' + (e.detail || 'desconocido'));
     window.addEventListener('magick-ready', onReady);
@@ -40,11 +48,6 @@ export default function Converter() {
       }
     `;
     document.head.appendChild(script);
-
-    return () => {
-      window.removeEventListener('magick-ready', onReady);
-      window.removeEventListener('magick-error', onError);
-    };
   }, []);
 
   const handleFiles = (e) => {
