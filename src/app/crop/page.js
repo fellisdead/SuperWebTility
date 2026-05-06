@@ -39,12 +39,10 @@ export default function Crop() {
     window.addEventListener('magick-ready', onReady);
     window.addEventListener('magick-error', onError);
     const script = document.createElement('script');
-    script.src = '/magick.umd.js';
-    script.onload = async () => {
+    script.type = 'module';
+    script.textContent = `
       try {
-        const magick = window['magick-wasm'];
-        if (!magick) throw new Error('magick-wasm module not found on window');
-        const { initializeImageMagick, ImageMagick, MagickFormat } = magick;
+        const { initializeImageMagick, ImageMagick, MagickFormat } = await import('/magick-wasm.js');
         const res = await fetch('/magick.wasm');
         if (!res.ok) throw new Error('magick.wasm not found: ' + res.status);
         const buf = await res.arrayBuffer();
@@ -55,10 +53,7 @@ export default function Crop() {
         console.error('[magick] init failed:', err);
         window.dispatchEvent(new CustomEvent('magick-error', { detail: err.message }));
       }
-    };
-    script.onerror = () => {
-      window.dispatchEvent(new CustomEvent('magick-error', { detail: 'Failed to load magick.umd.js' }));
-    };
+    `;
     document.head.appendChild(script);
   }, []);
 

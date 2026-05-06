@@ -21,14 +21,7 @@ function createWorker(useWebGpu) {
     ? "[{name:'webgpu',preferredLayout:'NCHW'},'wasm']"
     : "['wasm']";
   const code = `
-    try {
-      const resp = await fetch(self.location.origin + '/onnx/ort.all.min.js');
-      if (!resp.ok) throw new Error('Failed to load ONNX runtime: ' + resp.status);
-      eval(await resp.text());
-    } catch (e) {
-      self.postMessage({ type: 'error', msg: 'ONNX load: ' + e.message });
-      return;
-    }
+    importScripts(self.location.origin + '/onnx/ort.all.min.js');
     let s = null;
     let inName, outName;
     ort.env.wasm.wasmPaths = self.location.origin + '/onnx/';
