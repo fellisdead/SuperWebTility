@@ -79,7 +79,21 @@ const translations = {
     s2iDownloadSvg: "Download SVG", s2iCopySvg: "Copy SVG", s2iCopied: "Copied!",
     s2iImgSvgEmpty: "Upload an image to see the SVG code",
     s2iInvalidImg: "Failed to load image. Please try a different file.",
-    cardTitle13: "SVG ↔ Image", cardDesc13: "SVG to image & vice versa"
+    cardTitle13: "SVG ↔ Image", cardDesc13: "SVG to image & vice versa",
+    // Premium
+    premiumTitle: "Supercharged Tools",
+    premiumFree: "Free Plan",
+    premiumFreeDesc: "Limited daily image processing",
+    premiumMonthly: "Monthly",
+    premiumMonthlyPrice: "$2",
+    premiumMonthlyDesc: "Unlimited access, cancel anytime",
+    premiumLifetime: "Lifetime",
+    premiumLifetimePrice: "$25",
+    premiumLifetimeDesc: "Pay once, unlimited forever",
+    premiumBtnMonthly: "Get Monthly",
+    premiumBtnLifetime: "Get Lifetime",
+    premiumProcessing: "Processing image...",
+    premiumClose: "Close",
   },
   ES: {
     navTools: "Herramientas", navFeatures: "Funciones", navPricing: "Precios", navLogin: "Entrar", btnPremium: "Obtener Premium",
@@ -155,7 +169,21 @@ const translations = {
     s2iDownloadSvg: "Descargar SVG", s2iCopySvg: "Copiar SVG", s2iCopied: "¡Copiado!",
     s2iImgSvgEmpty: "Sube una imagen para ver el código SVG",
     s2iInvalidImg: "Error al cargar la imagen. Prueba con otro archivo.",
-    cardTitle13: "SVG ↔ Imagen", cardDesc13: "SVG a imagen y viceversa"
+    cardTitle13: "SVG ↔ Imagen", cardDesc13: "SVG a imagen y viceversa",
+    // Premium
+    premiumTitle: "Herramientas Supercargadas",
+    premiumFree: "Plan Gratuito",
+    premiumFreeDesc: "Procesamiento diario limitado",
+    premiumMonthly: "Mensual",
+    premiumMonthlyPrice: "$2",
+    premiumMonthlyDesc: "Acceso ilimitado, cancela cuando quieras",
+    premiumLifetime: "Pago Único",
+    premiumLifetimePrice: "$25",
+    premiumLifetimeDesc: "Paga una vez, ilimitado para siempre",
+    premiumBtnMonthly: "Obtener Mensual",
+    premiumBtnLifetime: "Obtener Vitalicio",
+    premiumProcessing: "Procesando imagen...",
+    premiumClose: "Cerrar",
   },
   JA: {
     navTools: "ツール", navFeatures: "機能", navPricing: "料金", navLogin: "ログイン", btnPremium: "プレミアムを取得",
@@ -231,7 +259,21 @@ const translations = {
     s2iDownloadSvg: "SVGをダウンロード", s2iCopySvg: "SVGをコピー", s2iCopied: "コピーしました！",
     s2iImgSvgEmpty: "画像をアップロードしてSVGコードを表示",
     s2iInvalidImg: "画像の読み込みに失敗しました。別のファイルをお試しください。",
-    cardTitle13: "SVG ↔ 画像", cardDesc13: "SVGから画像、その逆も"
+    cardTitle13: "SVG ↔ 画像", cardDesc13: "SVGから画像、その逆も",
+    // Premium
+    premiumTitle: "強化ツール",
+    premiumFree: "無料プラン",
+    premiumFreeDesc: "1日の画像処理に制限あり",
+    premiumMonthly: "月額",
+    premiumMonthlyPrice: "$2",
+    premiumMonthlyDesc: "無制限アクセス、いつでも解約可能",
+    premiumLifetime: "永久",
+    premiumLifetimePrice: "$25",
+    premiumLifetimeDesc: "一度の支払いで永遠に無制限",
+    premiumBtnMonthly: "月額を取得",
+    premiumBtnLifetime: "永久を取得",
+    premiumProcessing: "画像を処理中...",
+    premiumClose: "閉じる",
   }
 };
 

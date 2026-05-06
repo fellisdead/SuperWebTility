@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Moon, Sun, Globe, Star } from 'lucide-react';
+import { Moon, Sun, Globe, Star, X, Image } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 const safeGet = (key) => {
@@ -12,6 +12,7 @@ const safeGet = (key) => {
 export default function Header() {
   const [dark, setDark] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [premiumOpen, setPremiumOpen] = useState(false);
   const { lang, changeLang, t } = useLanguage();
 
   useEffect(() => {
@@ -81,11 +82,71 @@ export default function Header() {
           {dark ? <Sun className="w-5 h-5" strokeWidth={1.5} /> : <Moon className="w-5 h-5" strokeWidth={1.5} />}
         </button>
 
-        <button className="premium-btn text-white px-3 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-base font-bold shadow-xl flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <button
+          onClick={() => setPremiumOpen(true)}
+          className="premium-btn text-white px-3 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-base font-bold shadow-xl flex items-center gap-1.5 sm:gap-2 flex-shrink-0"
+        >
           <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-current" strokeWidth={1.5} />
           <span className="hidden sm:inline">{t.btnPremium}</span>
         </button>
       </div>
+
+      {premiumOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={() => setPremiumOpen(false)}>
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="relative bg-white dark:bg-slate-800 rounded-[28px] w-full max-w-md card-shadow overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setPremiumOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-all z-10"
+            >
+              <X className="w-4 h-4" strokeWidth={2} />
+            </button>
+
+            <div className="relative bg-gray-900 dark:bg-black h-48 flex items-center justify-center overflow-hidden">
+              <img src="/2dlls.jpg" alt="Premium" className="w-full h-full object-cover opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent" />
+              <div className="absolute bottom-4 left-6">
+                <h2 className="text-white text-2xl font-black tracking-tight">{t.premiumTitle}</h2>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-900 rounded-2xl border border-gray-200 dark:border-slate-700">
+                <div className="w-10 h-10 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center flex-shrink-0">
+                  <Image className="w-5 h-5 text-orange-500" strokeWidth={2} />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-gray-900 dark:text-white">{t.premiumFree}</p>
+                  <p className="text-xs text-gray-500 dark:text-slate-400">{t.premiumFreeDesc}</p>
+                </div>
+              </div>
+
+              <p className="text-center text-sm font-bold text-gray-500 dark:text-slate-400 uppercase tracking-wider">Upgrade</p>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 border border-gray-200 dark:border-slate-700 text-center">
+                  <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">{t.premiumMonthly}</div>
+                  <div className="text-3xl font-black text-gray-900 dark:text-white mb-1">{t.premiumMonthlyPrice}<span className="text-sm font-medium text-gray-400">/mo</span></div>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">{t.premiumMonthlyDesc}</p>
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-500/20">
+                    {t.premiumBtnMonthly}
+                  </button>
+                </div>
+                <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 border-2 border-purple-500 dark:border-purple-400 text-center relative">
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Best Value</div>
+                  <div className="text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-1">{t.premiumLifetime}</div>
+                  <div className="text-3xl font-black text-gray-900 dark:text-white mb-1">{t.premiumLifetimePrice}</div>
+                  <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">{t.premiumLifetimeDesc}</p>
+                  <button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-purple-500/20">
+                    {t.premiumBtnLifetime}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </header>
   );
 }
