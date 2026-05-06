@@ -126,7 +126,7 @@ export default function Header() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 dark:bg-slate-900 rounded-2xl p-4 border border-gray-200 dark:border-slate-700 text-center">
                   <div className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-1">{t.premiumMonthly}</div>
-                  <div className="text-3xl font-black text-gray-900 dark:text-white mb-1">{t.premiumMonthlyPrice}<span className="text-sm font-medium text-gray-400">/mo</span></div>
+                  <img src="/2dlls.jpg" alt="$2" className="w-full max-w-[120px] mx-auto rounded-lg shadow mb-2" />
                   <p className="text-xs text-gray-500 dark:text-slate-400 mb-3">{t.premiumMonthlyDesc}</p>
                   <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-500/20">
                     {t.premiumBtnMonthly}
