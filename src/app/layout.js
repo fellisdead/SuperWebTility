@@ -13,8 +13,8 @@ export const metadata = {
   description: 'The simplest way to prepare your images. Crop, resize, compress, and convert instantly.',
   icons: {
     icon: [
-      { url: '/favicon-light.svg', media: '(prefers-color-scheme: light)' },
-      { url: '/favicon-dark.svg', media: '(prefers-color-scheme: dark)' },
+      { url: '/favicon-light.svg', media: '(prefers-color-scheme: light)', type: 'image/svg+xml', sizes: 'any' },
+      { url: '/favicon-dark.svg', media: '(prefers-color-scheme: dark)', type: 'image/svg+xml', sizes: 'any' },
     ],
   },
   other: {
