@@ -120,6 +120,7 @@ export default function RemoveBg() {
         setFiles(prev => prev.map(f => f.id === item.id ? { ...f, status: 'processing', progress: 0 } : f));
         try {
           const blob = await bgRemoval.removeBackground(item.url, {
+            publicPath: window.location.origin + '/api/proxy/imgly/',
             model: 'medium',
             output: { format: 'image/png', quality: 1 },
             progress: (key, current, total_1) => {
@@ -748,7 +749,7 @@ export default function RemoveBg() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-bold text-gray-900 dark:text-white truncate">{item.file.name}</h4>
-                    <p className="text-xs mt-1">
+                    <div className="text-xs mt-1">
                       {item.status === 'done' && (
                         <span className="text-green-500 font-bold">{t.bgDone || 'Done'} {item.newSize ? `(${fmtBytes(item.newSize)})` : ''}</span>
                       )}
@@ -771,7 +772,7 @@ export default function RemoveBg() {
                           {isManualTarget ? (t.bgCardManualHint || 'Click to erase background') : isColorTarget ? (t.bgCardColorHint || 'Click to pick colors') : fmtBytes(item.origSize)}
                         </span>
                       )}
-                    </p>
+                    </div>
                   </div>
                   <button onClick={(e) => { e.stopPropagation(); removeFile(item.id); }} className="p-2 text-gray-400 hover:text-red-500 transition-colors">
                     <X className="w-5 h-5" strokeWidth={1.5}/>

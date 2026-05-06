@@ -4,7 +4,7 @@ const cspHeader = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' blob: data: https:",
   "font-src 'self' data:",
-  "connect-src 'self' blob: data: https://huggingface.co https://*.huggingface.co",
+  "connect-src 'self' blob: data: https: https://huggingface.co https://*.huggingface.co https://*.hf.co https://staticimgly.com",
   "worker-src 'self' blob:",
   "child-src 'self' blob:",
   "frame-src 'none'",
