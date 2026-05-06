@@ -58,10 +58,12 @@ export default function Resize() {
     window.addEventListener('magick-error', onError);
 
     const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = `
+    script.src = '/magick.umd.js';
+    script.onload = async () => {
       try {
-        const { initializeImageMagick, ImageMagick, MagickFormat } = await import('/magick-wasm.js');
+        const magick = window['magick-wasm'];
+        if (!magick) throw new Error('magick-wasm module not found on window');
+        const { initializeImageMagick, ImageMagick, MagickFormat } = magick;
         const res = await fetch('/magick.wasm');
         if (!res.ok) throw new Error('magick.wasm not found: ' + res.status);
         const buf = await res.arrayBuffer();
@@ -72,7 +74,10 @@ export default function Resize() {
         console.error('[magick] init failed:', err);
         window.dispatchEvent(new CustomEvent('magick-error', { detail: err.message }));
       }
-    `;
+    };
+    script.onerror = () => {
+      window.dispatchEvent(new CustomEvent('magick-error', { detail: 'Failed to load magick.umd.js' }));
+    };
     document.head.appendChild(script);
   }, []);
 
