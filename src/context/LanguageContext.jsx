@@ -68,20 +68,18 @@ const translations = {
     wmPreview: "Preview", wmPreviewEmpty: "Drop images to see a preview",
     cardTitle12: "Watermark", cardDesc12: "Add text or logo",
     // SVG to Image
-    s2iTitle: "SVG to Image", s2iDesc: "Paste your SVG code or drop an .svg file, choose an output format, and download a high-quality raster image. All conversion runs in your browser.",
+    s2iTitle: "SVG ↔ Image Converter", s2iDesc: "Switch between converting SVG to raster images and converting raster images to SVG. Everything runs in your browser.",
     s2iSvgCode: "SVG Code", s2iPlaceholder: "<svg xmlns=\"http://www.w3.org/2000/svg\"...",
     s2iSample: "Load sample", s2iUpload: "Upload .svg",
     s2iSize: "Output Size", s2iCustom: "Custom", s2iAutoSize: "Uses the SVG viewBox dimensions",
     s2iConverting: "Converting...", s2iResult: "Result", s2iPreviewEmpty: "Paste SVG code to see a preview",
     s2iEmpty: "Paste some SVG code first.",
-    cardTitle13: "SVG to Image", cardDesc13: "Convert SVG to any format",
-    // Image to SVG
-    cardTitle14: "Image to SVG", cardDesc14: "Convert any image to SVG",
-    i2sTitle: "Image to SVG", i2sDesc: "Convert any image to an SVG file. Drop a PNG, JPEG, or WebP image and get a clean, embeddable SVG document. Everything runs in your browser.",
-    i2sInput: "Upload Image", i2sDrop: "Drop an image or click to browse",
-    i2sDownload: "Download SVG", i2sCopy: "Copy SVG", i2sCopied: "Copied!",
-    i2sSvgCode: "SVG Code", i2sPreviewEmpty: "Upload an image to see the SVG code",
-    i2sInvalidImg: "Failed to load image. Please try a different file."
+    s2iModeSvg2Img: "SVG → Image", s2iModeImg2Svg: "Image → SVG",
+    s2iUploadImg: "Upload Image", s2iDropImg: "Drop an image or click to browse",
+    s2iDownloadSvg: "Download SVG", s2iCopySvg: "Copy SVG", s2iCopied: "Copied!",
+    s2iImgSvgEmpty: "Upload an image to see the SVG code",
+    s2iInvalidImg: "Failed to load image. Please try a different file.",
+    cardTitle13: "SVG ↔ Image", cardDesc13: "SVG to image & vice versa"
   },
   ES: {
     navTools: "Herramientas", navFeatures: "Funciones", navPricing: "Precios", navLogin: "Entrar", btnPremium: "Obtener Premium",
@@ -146,20 +144,18 @@ const translations = {
     wmPreview: "Vista Previa", wmPreviewEmpty: "Suelta imágenes para ver la vista previa",
     cardTitle12: "Marca de Agua", cardDesc12: "Añadir texto o logo",
     // SVG to Image
-    s2iTitle: "SVG a Imagen", s2iDesc: "Pega tu código SVG o suelta un archivo .svg, elige el formato de salida y descarga una imagen rasterizada de alta calidad. Toda la conversión se ejecuta en tu navegador.",
+    s2iTitle: "Conversor SVG ↔ Imagen", s2iDesc: "Alterna entre convertir SVG a imágenes rasterizadas y convertir imágenes rasterizadas a SVG. Todo se ejecuta en tu navegador.",
     s2iSvgCode: "Código SVG", s2iPlaceholder: "<svg xmlns=\"http://www.w3.org/2000/svg\"...",
     s2iSample: "Cargar ejemplo", s2iUpload: "Subir .svg",
     s2iSize: "Tamaño de Salida", s2iCustom: "Personalizado", s2iAutoSize: "Usa las dimensiones del viewBox",
     s2iConverting: "Convirtiendo...", s2iResult: "Resultado", s2iPreviewEmpty: "Pega código SVG para ver la vista previa",
     s2iEmpty: "Pega código SVG primero.",
-    cardTitle13: "SVG a Imagen", cardDesc13: "Convierte SVG a cualquier formato",
-    // Image to SVG
-    cardTitle14: "Imagen a SVG", cardDesc14: "Convierte cualquier imagen a SVG",
-    i2sTitle: "Imagen a SVG", i2sDesc: "Convierte cualquier imagen a un archivo SVG. Suelta una imagen PNG, JPEG o WebP y obtén un documento SVG limpio e incrustable. Todo se ejecuta en tu navegador.",
-    i2sInput: "Subir Imagen", i2sDrop: "Suelta una imagen o haz clic para buscar",
-    i2sDownload: "Descargar SVG", i2sCopy: "Copiar SVG", i2sCopied: "¡Copiado!",
-    i2sSvgCode: "Código SVG", i2sPreviewEmpty: "Sube una imagen para ver el código SVG",
-    i2sInvalidImg: "Error al cargar la imagen. Prueba con otro archivo."
+    s2iModeSvg2Img: "SVG → Imagen", s2iModeImg2Svg: "Imagen → SVG",
+    s2iUploadImg: "Subir Imagen", s2iDropImg: "Suelta una imagen o haz clic para buscar",
+    s2iDownloadSvg: "Descargar SVG", s2iCopySvg: "Copiar SVG", s2iCopied: "¡Copiado!",
+    s2iImgSvgEmpty: "Sube una imagen para ver el código SVG",
+    s2iInvalidImg: "Error al cargar la imagen. Prueba con otro archivo.",
+    cardTitle13: "SVG ↔ Imagen", cardDesc13: "SVG a imagen y viceversa"
   },
   JA: {
     navTools: "ツール", navFeatures: "機能", navPricing: "料金", navLogin: "ログイン", btnPremium: "プレミアムを取得",
@@ -224,20 +220,18 @@ const translations = {
     wmPreview: "プレビュー", wmPreviewEmpty: "画像をドロップしてプレビューを表示",
     cardTitle12: "透かし", cardDesc12: "テキストまたはロゴを追加",
     // SVG to Image
-    s2iTitle: "SVGから画像", s2iDesc: "SVGコードを貼り付けるか.svgファイルをドロップし、出力形式を選択して高品質のラスター画像をダウンロード。すべての変換はブラウザ内で実行されます。",
+    s2iTitle: "SVG ↔ 画像コンバーター", s2iDesc: "SVGからラスター画像への変換と、ラスター画像からSVGへの変換を切り替えられます。すべてブラウザ内で実行されます。",
     s2iSvgCode: "SVGコード", s2iPlaceholder: "<svg xmlns=\"http://www.w3.org/2000/svg\"...",
     s2iSample: "サンプルを読み込む", s2iUpload: ".svgをアップロード",
     s2iSize: "出力サイズ", s2iCustom: "カスタム", s2iAutoSize: "viewBoxの寸法を使用",
     s2iConverting: "変換中...", s2iResult: "結果", s2iPreviewEmpty: "SVGコードを貼り付けてプレビューを表示",
     s2iEmpty: "最初にSVGコードを貼り付けてください。",
-    cardTitle13: "SVGから画像", cardDesc13: "SVGを任意の形式に変換",
-    // Image to SVG
-    cardTitle14: "画像からSVG", cardDesc14: "任意の画像をSVGに変換",
-    i2sTitle: "画像からSVG", i2sDesc: "画像をSVGファイルに変換します。PNG、JPEG、WebP画像をドロップすると、クリーンで埋め込み可能なSVGドキュメントを取得できます。すべてブラウザ内で実行されます。",
-    i2sInput: "画像をアップロード", i2sDrop: "画像をドロップするかクリックして参照",
-    i2sDownload: "SVGをダウンロード", i2sCopy: "SVGをコピー", i2sCopied: "コピーしました！",
-    i2sSvgCode: "SVGコード", i2sPreviewEmpty: "画像をアップロードしてSVGコードを表示",
-    i2sInvalidImg: "画像の読み込みに失敗しました。別のファイルをお試しください。"
+    s2iModeSvg2Img: "SVG → 画像", s2iModeImg2Svg: "画像 → SVG",
+    s2iUploadImg: "画像をアップロード", s2iDropImg: "画像をドロップするかクリックして参照",
+    s2iDownloadSvg: "SVGをダウンロード", s2iCopySvg: "SVGをコピー", s2iCopied: "コピーしました！",
+    s2iImgSvgEmpty: "画像をアップロードしてSVGコードを表示",
+    s2iInvalidImg: "画像の読み込みに失敗しました。別のファイルをお試しください。",
+    cardTitle13: "SVG ↔ 画像", cardDesc13: "SVGから画像、その逆も"
   }
 };
 
