@@ -1,0 +1,253 @@
+'use client';
+
+import { createContext, useContext, useState, useEffect } from 'react';
+
+const translations = {
+  EN: {
+    navTools: "Tools", navFeatures: "Features", navPricing: "Pricing", navLogin: "Login", btnPremium: "Get Premium",
+    heroTitle: "SuperWebTility", heroDesc1: "The Simplest Way To Prepare Your Images.",
+    heroDesc2: "Crop, resize, compress, and convert instantly. Zero distractions. Pure utility. All inside your browser.",
+    cardTitle1: "Format Converter", cardDesc1: "Any to Any",
+    cardTitle2: "Filters & Effects", cardDesc2: "16px",
+    cardTitle3: "Adjust Colors", cardDesc3: "16px",
+    cardTitle4: "Remove Background", cardDesc4: "18px",
+    cardTitle5: "Add Text", cardDesc5: "16px",
+    cardTitle6: "Draw & Paint", cardDesc6: "16px",
+    cardTitle7: "Compress Image", cardDesc7: "Reduce size",
+    cardTitle8: "Crop Image", cardDesc8: "Perfect size",
+    cardTitle9: "Resize Image", cardDesc9: "Any dimensions",
+    cardTitle10: "Upscale Image", cardDesc10: "2× or 4× resize",
+    cardTitle11: "Blur & Censor", cardDesc11: "Censor sensitive areas",
+    // Converter Page
+    convTitle: "Format Converter", convDesc: "Transform images instantly to any format. All in your browser.",
+    dropTitle: "Drag & Drop images here", dropDesc: "or click to browse your files",
+    lblFormat: "Output Format", lblQuality: "Quality", btnConvert: "Convert All", btnClear: "Clear all images",
+    // Compress Page
+    compTitle: "Compress Image", compDesc: "Reduce image file size without noticeable quality loss. All in your browser.",
+    // Crop Page
+    cropTitle: "Crop Image", cropDesc: "Drag to set your crop area, fine-tune the width and height in pixels, and get your result instantly — everything runs in your browser, so your image never leaves your device.",
+    // Resize Page
+    resizeTitle: "Resize Image", resizeDesc: "Resize one or more images by exact pixels, percentage, or social media preset. Runs in your browser — no upload, no account.",
+    lblPixels: "Pixels", lblPercentage: "Percentage", lblSocial: "Social Media",
+    lblWidth: "Width", lblHeight: "Height", lblPreset: "Preset",
+    btnResize: "Resize All", lblResized: "Resized", lblResizing: "Resizing...", lblLoading: "Loading...", lblZip: "ZIP", lblError: "Error",
+    // Upscale Page
+    upscaleTitle: "Upscale Image", upscaleDesc: "Enhance low-quality or compressed photos using Real-ESRGAN AI. Runs entirely on your device — processing time depends on your computer's hardware (GPU accelerates significantly). Drop up to 5 images.",
+    lblScale: "Scale Factor", btnUpscale: "Upscale All", lblUpscaling: "Upscaling...", upscaleMaxFiles: "Maximum 5 images at once", dropMore: "Drop more images",
+    // Remove Background Page
+    bgTitle: "Remove Background", bgDesc: "Drop one image or fifty — get clean, transparent PNGs in seconds. Everything runs locally on your device, so your photos never leave your browser.",
+    bgAuto: "Auto", bgManual: "Manual", bgColor: "By Color",
+    bgRemoveAuto: "Remove All Backgrounds", bgLoading: "Loading AI model...", bgProcessing: "Processing...",
+    bgAutoUnavailable: "Auto mode engine loading — if it fails, try Manual or Color mode.",
+    bgErase: "Erase", bgRestore: "Restore", bgBrushSize: "Brush", bgClear: "Clear",
+    bgApply: "Apply", bgManualHint: "Paint over areas to remove (red brush) or restore (green brush). Click Apply when done.",
+    bgTolerance: "Tolerance", bgPick: "Pick Colors", bgEdit: "Edit",
+    bgRemoveColors: "Remove Colors", bgColorHint: "Click on colors in the image to add them to the removal list. Click again to deselect. Adjust tolerance and press Remove Colors.",
+    bgDone: "Done",
+    bgEta: "Estimated", bgRemaining: "remaining",
+    bgManualClickHint: "Click any image below to start erasing", bgColorClickHint: "Click any image below to pick colors",
+    bgCardManualHint: "Click to erase background", bgCardColorHint: "Click to pick colors",
+    bgDownload: "Download", bgNoResults: "No results yet",
+    bgContiguous: "Contiguous only",
+    // Blur & Censor
+    blTitle: "Blur & Censor", blDesc: "Blur an image or just the parts that matter. Drag rectangles over faces, license plates, and IDs to censor them. Everything runs in your browser.",
+    blModeBlur: "Blur", blBlurDesc: "Soft Gaussian blur",
+    blModePixelate: "Pixelate", blPixelateDesc: "Mosaic effect",
+    blModeBlackbar: "Black Bar", blBlackbarDesc: "Solid black rectangle",
+    blStrength: "Strength", blPixelSize: "Size",
+    blBlackbarHint: "Drag rectangles on the image to place solid black bars.",
+    blApply: "Apply Censor", blClearRects: "Clear all", blResult: "Result",
+    blEditor: "Editor", blResultPlaceholder: "Click Apply Censor to see the result",
+    // Watermark
+    wmTitle: "Watermark Images", wmDesc: "Drop your photos, type your name or upload a logo, and download every image back with the same watermark applied. Free, no sign-up, and your photos and logo never leave your browser.",
+    wmTypeText: "Text", wmTypeLogo: "Logo",
+    wmTextLabel: "Watermark Text", wmTextPlaceholder: "© Your Name",
+    wmFontSize: "Font Size", wmFontFamily: "Font Style", wmColor: "Color", wmOpacity: "Opacity", wmPosition: "Position", wmRotation: "Rotation",
+    wmLogoUpload: "Upload Logo", wmLogoScale: "Logo Size",
+    wmTile: "Tile", wmApply: "Apply Watermark", wmApplying: "Applying...", wmDone: "Watermarked",
+    wmPreview: "Preview", wmPreviewEmpty: "Drop images to see a preview",
+    cardTitle12: "Watermark", cardDesc12: "Add text or logo",
+    // SVG to Image
+    s2iTitle: "SVG to Image", s2iDesc: "Paste your SVG code or drop an .svg file, choose an output format, and download a high-quality raster image. All conversion runs in your browser.",
+    s2iSvgCode: "SVG Code", s2iPlaceholder: "<svg xmlns=\"http://www.w3.org/2000/svg\"...",
+    s2iSample: "Load sample", s2iUpload: "Upload .svg",
+    s2iSize: "Output Size", s2iCustom: "Custom", s2iAutoSize: "Uses the SVG viewBox dimensions",
+    s2iConverting: "Converting...", s2iResult: "Result", s2iPreviewEmpty: "Paste SVG code to see a preview",
+    s2iEmpty: "Paste some SVG code first.",
+    cardTitle13: "SVG to Image", cardDesc13: "Convert SVG to any format"
+  },
+  ES: {
+    navTools: "Herramientas", navFeatures: "Funciones", navPricing: "Precios", navLogin: "Entrar", btnPremium: "Obtener Premium",
+    heroTitle: "SuperWebTility", heroDesc1: "La Forma Más Simple De Preparar Tus Imágenes.",
+    heroDesc2: "Recorta, redimensiona, comprime y convierte al instante. Cero distracciones. Pura utilidad. Todo desde tu navegador.",
+    cardTitle1: "Convertidor de Formatos", cardDesc1: "Universal",
+    cardTitle2: "Filtros y Efectos", cardDesc2: "16px",
+    cardTitle3: "Ajustar Colores", cardDesc3: "16px",
+    cardTitle4: "Quitar Fondo", cardDesc4: "18px",
+    cardTitle5: "Añadir Texto", cardDesc5: "16px",
+    cardTitle6: "Dibujar y Pintar", cardDesc6: "16px",
+    cardTitle7: "Comprimir Imagen", cardDesc7: "Reducir tamaño",
+    cardTitle8: "Recortar Imagen", cardDesc8: "Tamaño perfecto",
+    cardTitle9: "Redimensionar Imagen", cardDesc9: "Cualquier dimensión",
+    cardTitle10: "Escalar Imagen", cardDesc10: "2× o 4× resize",
+    cardTitle11: "Difuminar", cardDesc11: "Censurar zonas sensibles",
+    // Converter Page
+    convTitle: "Convertidor de Formatos", convDesc: "Transforma imágenes al instante a cualquier formato. Todo en tu navegador.",
+    dropTitle: "Arrastra tus imágenes aquí", dropDesc: "o haz clic para buscar en tus archivos",
+    lblFormat: "Formato de Salida", lblQuality: "Calidad", btnConvert: "Convertir Todo", btnClear: "Borrar todas las imágenes",
+    // Compress Page
+    compTitle: "Comprimir Imagen", compDesc: "Reduce el tamaño de archivo sin pérdida notable de calidad. Todo en tu navegador.",
+    // Crop Page
+    cropTitle: "Recortar Imagen", cropDesc: "Arrastra para definir tu área de recorte, ajusta el ancho y alto en píxeles, y obtén el resultado al instante — todo en tu navegador, tu imagen nunca sale de tu dispositivo.",
+    // Resize Page
+    resizeTitle: "Redimensionar Imagen", resizeDesc: "Redimensiona una o más imágenes por píxeles exactos, porcentaje o preajustes de redes sociales. Todo en tu navegador — sin subida, sin cuenta.",
+    lblPixels: "Píxeles", lblPercentage: "Porcentaje", lblSocial: "Redes Sociales",
+    lblWidth: "Ancho", lblHeight: "Alto", lblPreset: "Preajuste",
+    btnResize: "Redimensionar Todo", lblResized: "Redimensionado", lblResizing: "Redimensionando...", lblLoading: "Cargando...", lblZip: "ZIP", lblError: "Error",
+    // Upscale Page
+    upscaleTitle: "Escalar Imagen", upscaleDesc: "Mejora la calidad de fotos viejas o comprimidas usando IA Real-ESRGAN. Funciona completamente en tu equipo — el tiempo de procesamiento depende del hardware (GPU acelera notablemente). Sube hasta 5 imágenes.",
+    lblScale: "Factor de Escala", btnUpscale: "Escalar Todo", lblUpscaling: "Escalando...", upscaleMaxFiles: "Máximo 5 imágenes a la vez", dropMore: "Añadir más imágenes",
+    bgTitle: "Quitar Fondo", bgDesc: "Suelta una imagen o cincuenta — obtén PNGs transparentes y limpios en segundos. Todo funciona localmente en tu dispositivo, tus fotos nunca salen del navegador.",
+    bgAuto: "Auto", bgManual: "Manual", bgColor: "Por Color",
+    bgRemoveAuto: "Quitar Todos los Fondos", bgLoading: "Cargando modelo IA...", bgProcessing: "Procesando...",
+    bgAutoUnavailable: "Cargando motor de modo automático — si falla, prueba modo Manual o Por Color.",
+    bgErase: "Borrar", bgRestore: "Restaurar", bgBrushSize: "Pincel", bgClear: "Limpiar",
+    bgApply: "Aplicar", bgManualHint: "Pinta sobre las áreas a eliminar (pincel rojo) o restaurar (pincel verde). Haz clic en Aplicar cuando termines.",
+    bgTolerance: "Tolerancia", bgPick: "Elegir Colores", bgEdit: "Editar",
+    bgRemoveColors: "Quitar Colores", bgColorHint: "Haz clic en los colores de la imagen para agregarlos a la lista de eliminación. Haz clic de nuevo para deseleccionar. Ajusta la tolerancia y presiona Quitar Colores.",
+    bgDone: "Listo",
+    bgEta: "Estimado", bgRemaining: "restante",
+    bgManualClickHint: "Haz clic en cualquier imagen de abajo para empezar a borrar", bgColorClickHint: "Haz clic en cualquier imagen de abajo para elegir colores",
+    bgCardManualHint: "Clic para borrar fondo", bgCardColorHint: "Clic para elegir colores",
+    bgDownload: "Descargar", bgNoResults: "Sin resultados aún",
+    bgContiguous: "Solo contiguo",
+    blTitle: "Difuminar y Censurar", blDesc: "Difumina una imagen o solo las partes importantes. Arrastra rectángulos sobre rostros, matrículas e identificaciones para censurarlos.",
+    blModeBlur: "Difuminar", blBlurDesc: "Desenfoque Gaussiano suave",
+    blModePixelate: "Pixelar", blPixelateDesc: "Efecto mosaico",
+    blModeBlackbar: "Barra Negra", blBlackbarDesc: "Rectángulo negro sólido",
+    blStrength: "Intensidad", blPixelSize: "Tamaño",
+    blBlackbarHint: "Arrastra rectángulos sobre la imagen para colocar barras negras.",
+    blApply: "Aplicar Censura", blClearRects: "Limpiar todo", blResult: "Resultado",
+    blEditor: "Editor", blResultPlaceholder: "Clic en Aplicar Censura para ver el resultado",
+    // Watermark
+    wmTitle: "Marcas de Agua", wmDesc: "Suelta tus fotos, escribe tu nombre o sube un logo, y descarga cada imagen con la misma marca de agua aplicada. Gratis, sin registro, y tus fotos y logo nunca salen de tu navegador.",
+    wmTypeText: "Texto", wmTypeLogo: "Logo",
+    wmTextLabel: "Texto de Marca", wmTextPlaceholder: "© Tu Nombre",
+    wmFontSize: "Tamaño de Fuente", wmFontFamily: "Estilo de Fuente", wmColor: "Color", wmOpacity: "Opacidad", wmPosition: "Posición", wmRotation: "Rotación",
+    wmLogoUpload: "Subir Logo", wmLogoScale: "Tamaño del Logo",
+    wmTile: "Mosaico", wmApply: "Aplicar Marca", wmApplying: "Aplicando...", wmDone: "Marcado",
+    wmPreview: "Vista Previa", wmPreviewEmpty: "Suelta imágenes para ver la vista previa",
+    cardTitle12: "Marca de Agua", cardDesc12: "Añadir texto o logo",
+    // SVG to Image
+    s2iTitle: "SVG a Imagen", s2iDesc: "Pega tu código SVG o suelta un archivo .svg, elige el formato de salida y descarga una imagen rasterizada de alta calidad. Toda la conversión se ejecuta en tu navegador.",
+    s2iSvgCode: "Código SVG", s2iPlaceholder: "<svg xmlns=\"http://www.w3.org/2000/svg\"...",
+    s2iSample: "Cargar ejemplo", s2iUpload: "Subir .svg",
+    s2iSize: "Tamaño de Salida", s2iCustom: "Personalizado", s2iAutoSize: "Usa las dimensiones del viewBox",
+    s2iConverting: "Convirtiendo...", s2iResult: "Resultado", s2iPreviewEmpty: "Pega código SVG para ver la vista previa",
+    s2iEmpty: "Pega código SVG primero.",
+    cardTitle13: "SVG a Imagen", cardDesc13: "Convierte SVG a cualquier formato"
+  },
+  JA: {
+    navTools: "ツール", navFeatures: "機能", navPricing: "料金", navLogin: "ログイン", btnPremium: "プレミアムを取得",
+    heroTitle: "SuperWebTility", heroDesc1: "画像を準備する最も簡単な方法。",
+    heroDesc2: "即座にクロップ、リサイズ、圧縮、変換。邪魔なものは一切なし。純粋なユーティリティ。すべてブラウザ内で。",
+    cardTitle1: "フォーマット変換", cardDesc1: "ユニバーサル",
+    cardTitle2: "フィルターとエフェクト", cardDesc2: "16px",
+    cardTitle3: "色の調整", cardDesc3: "16px",
+    cardTitle4: "背景を削除", cardDesc4: "18px",
+    cardTitle5: "テキストを追加", cardDesc5: "16px",
+    cardTitle6: "描画とペイント", cardDesc6: "16px",
+    cardTitle7: "画像圧縮", cardDesc7: "サイズ削減",
+    cardTitle8: "画像切り抜き", cardDesc8: "完璧なサイズ",
+    cardTitle9: "画像リサイズ", cardDesc9: "任意の寸法",
+    cardTitle10: "画像アップスケール", cardDesc10: "2倍/4倍リサイズ",
+    cardTitle11: "ぼかし", cardDesc11: "機密エリアを検閲",
+    // Converter Page
+    convTitle: "フォーマット変換", convDesc: "画像を即座に任意の形式に変換。すべてブラウザ内で。",
+    dropTitle: "ここに画像をドラッグ＆ドロップ", dropDesc: "またはクリックしてファイルを参照",
+    lblFormat: "出力フォーマット", lblQuality: "品質", btnConvert: "すべて変換", btnClear: "すべての画像をクリア",
+    // Compress Page
+    compTitle: "画像圧縮", compDesc: "品質を落とさずにファイルサイズを削減。すべてブラウザ内で。",
+    // Crop Page
+    cropTitle: "画像切り抜き", cropDesc: "ドラッグして切り抜き範囲を設定し、ピクセル単位で幅と高さを調整して即座に結果を取得 — すべてブラウザ内で動作し、画像がデバイスから出ることはありません。",
+    // Resize Page
+    resizeTitle: "画像リサイズ", resizeDesc: "正確なピクセル、パーセンテージ、またはSNSプリセットで画像をリサイズ。ブラウザ内で処理 — アップロード不要、アカウント不要。",
+    lblPixels: "ピクセル", lblPercentage: "パーセント", lblSocial: "SNS",
+    lblWidth: "幅", lblHeight: "高さ", lblPreset: "プリセット",
+    btnResize: "すべてリサイズ", lblResized: "リサイズ済み", lblResizing: "リサイズ中...", lblLoading: "読み込み中...", lblZip: "ZIP", lblError: "エラー",
+    // Upscale Page
+    upscaleTitle: "画像アップスケール", upscaleDesc: "Real-ESRGAN AIで低画質や圧縮された写真の品質を向上。お使いのデバイス上で完全に動作 — 処理時間はハードウェアに依存します（GPUで大幅に高速化）。最大5枚まで。",
+    lblScale: "拡大倍率", btnUpscale: "すべてアップスケール", lblUpscaling: "アップスケール中...", upscaleMaxFiles: "一度に最大5枚まで", dropMore: "さらに画像を追加",
+    bgTitle: "背景を削除", bgDesc: "1枚でも50枚でも — 数秒でクリーンな透過PNGを取得。すべてデバイス上でローカル処理され、写真がブラウザから出ることはありません。",
+    bgAuto: "自動", bgManual: "手動", bgColor: "色指定",
+    bgRemoveAuto: "すべての背景を削除", bgLoading: "AIモデル読み込み中...", bgProcessing: "処理中...",
+    bgAutoUnavailable: "自動モードエンジン読み込み中 — 失敗した場合は手動または色指定モードをお試しください。",
+    bgErase: "消去", bgRestore: "復元", bgBrushSize: "ブラシ", bgClear: "クリア",
+    bgApply: "適用", bgManualHint: "削除する領域（赤ブラシ）または復元する領域（緑ブラシ）を塗ります。完了したら適用をクリック。",
+    bgTolerance: "許容値", bgPick: "色を選択", bgEdit: "編集",
+    bgRemoveColors: "色を削除", bgColorHint: "画像内の色をクリックして削除リストに追加します。再度クリックで選択解除。許容値を調整して色を削除を押します。",
+    bgDone: "完了",
+    bgEta: "推定", bgRemaining: "残り",
+    bgManualClickHint: "下の画像をクリックして消去を開始", bgColorClickHint: "下の画像をクリックして色を選択",
+    bgCardManualHint: "クリックして背景を消去", bgCardColorHint: "クリックして色を選択",
+    bgDownload: "ダウンロード", bgNoResults: "まだ結果がありません",
+    bgContiguous: "隣接のみ",
+    blTitle: "ぼかしと検閲", blDesc: "画像全体または特定部分だけをぼかします。顔、ナンバープレート、IDの上に四角形をドラッグして検閲。すべてブラウザ内で処理されます。",
+    blModeBlur: "ぼかし", blBlurDesc: "ソフトなガウスぼかし",
+    blModePixelate: "モザイク", blPixelateDesc: "モザイク効果",
+    blModeBlackbar: "黒塗り", blBlackbarDesc: "黒い長方形",
+    blStrength: "強度", blPixelSize: "サイズ",
+    blBlackbarHint: "画像上でドラッグして黒塗りを配置します。",
+    blApply: "検閲を適用", blClearRects: "すべてクリア", blResult: "結果",
+    blEditor: "エディタ", blResultPlaceholder: "検閲を適用をクリックして結果を表示",
+    // Watermark
+    wmTitle: "透かし画像", wmDesc: "写真をドロップし、名前を入力またはロゴをアップロードすると、同じ透かしが適用された画像をダウンロードできます。無料、登録不要、写真とロゴはブラウザから出ません。",
+    wmTypeText: "テキスト", wmTypeLogo: "ロゴ",
+    wmTextLabel: "透かしテキスト", wmTextPlaceholder: "© あなたの名前",
+    wmFontSize: "フォントサイズ", wmFontFamily: "フォントスタイル", wmColor: "色", wmOpacity: "不透明度", wmPosition: "位置", wmRotation: "回転",
+    wmLogoUpload: "ロゴをアップロード", wmLogoScale: "ロゴサイズ",
+    wmTile: "タイル", wmApply: "透かしを適用", wmApplying: "適用中...", wmDone: "透かし済み",
+    wmPreview: "プレビュー", wmPreviewEmpty: "画像をドロップしてプレビューを表示",
+    cardTitle12: "透かし", cardDesc12: "テキストまたはロゴを追加",
+    // SVG to Image
+    s2iTitle: "SVGから画像", s2iDesc: "SVGコードを貼り付けるか.svgファイルをドロップし、出力形式を選択して高品質のラスター画像をダウンロード。すべての変換はブラウザ内で実行されます。",
+    s2iSvgCode: "SVGコード", s2iPlaceholder: "<svg xmlns=\"http://www.w3.org/2000/svg\"...",
+    s2iSample: "サンプルを読み込む", s2iUpload: ".svgをアップロード",
+    s2iSize: "出力サイズ", s2iCustom: "カスタム", s2iAutoSize: "viewBoxの寸法を使用",
+    s2iConverting: "変換中...", s2iResult: "結果", s2iPreviewEmpty: "SVGコードを貼り付けてプレビューを表示",
+    s2iEmpty: "最初にSVGコードを貼り付けてください。",
+    cardTitle13: "SVGから画像", cardDesc13: "SVGを任意の形式に変換"
+  }
+};
+
+const LanguageContext = createContext();
+
+export function LanguageProvider({ children }) {
+  const [lang, setLang] = useState('ES');
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('preferred-lang');
+      if (saved && ['EN', 'ES', 'JA'].includes(saved.toUpperCase())) {
+        setLang(saved.toUpperCase());
+      }
+    } catch (_) {}
+  }, []);
+
+  const changeLang = (newLang) => {
+    setLang(newLang);
+    try { localStorage.setItem('preferred-lang', newLang); } catch (_) {}
+  };
+
+  const t = translations[lang];
+
+  return (
+    <LanguageContext.Provider value={{ lang, changeLang, t }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage() {
+  return useContext(LanguageContext);
+}
