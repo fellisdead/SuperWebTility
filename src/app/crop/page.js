@@ -24,6 +24,15 @@ export default function Crop() {
   const [cropH, setCropH] = useState(200);
   const [resultUrl, setResultUrl] = useState(null);
   const magickInitRef = useRef(false);
+  const imgRef = useRef(null);
+  const containerRef = useRef(null);
+  const displayLayoutRef = useRef({ dx: 0, dy: 0, dw: 0, dh: 0 });
+  const imgNaturalRef = useRef({ w: 0, h: 0 });
+  const cropRef = useRef({ x: 0, y: 0, w: 300, h: 200 });
+  const draggingRef = useRef(false);
+  const resizingRef = useRef(false);
+  const resizeEdgeRef = useRef(null);
+  const draggerRef = useRef({ ox: 0, oy: 0 });
 
   useEffect(() => {
     if (magickInitRef.current) return;
@@ -106,6 +115,18 @@ export default function Crop() {
     }
   }, [imgNatural, cropW, cropH]);
 
+  useEffect(() => {
+    displayLayoutRef.current = displayLayout;
+  }, [displayLayout]);
+
+  useEffect(() => {
+    cropRef.current = crop;
+  }, [crop]);
+
+  useEffect(() => {
+    imgNaturalRef.current = imgNatural;
+  }, [imgNatural]);
+
   const toDisplay = (px) => {
     const { dw, iw } = { dw: displayLayout.dw, iw: imgNatural.w };
     return iw ? (px / iw) * dw : 0;
@@ -129,23 +150,23 @@ export default function Crop() {
     const boxBottom = boxTop + boxH;
     const near = (v, t) => Math.abs(v - t) < edge;
 
-    if (near(mx, boxLeft) && near(my, boxTop)) { resizing.current = true; resizeEdge.current = 'nw'; }
-    else if (near(mx, boxRight) && near(my, boxTop)) { resizing.current = true; resizeEdge.current = 'ne'; }
-    else if (near(mx, boxLeft) && near(my, boxBottom)) { resizing.current = true; resizeEdge.current = 'sw'; }
-    else if (near(mx, boxRight) && near(my, boxBottom)) { resizing.current = true; resizeEdge.current = 'se'; }
-    else if (near(mx, boxLeft) && my > boxTop && my < boxBottom) { resizing.current = true; resizeEdge.current = 'w'; }
-    else if (near(mx, boxRight) && my > boxTop && my < boxBottom) { resizing.current = true; resizeEdge.current = 'e'; }
-    else if (near(my, boxTop) && mx > boxLeft && mx < boxRight) { resizing.current = true; resizeEdge.current = 'n'; }
-    else if (near(my, boxBottom) && mx > boxLeft && mx < boxRight) { resizing.current = true; resizeEdge.current = 's'; }
+    if (near(mx, boxLeft) && near(my, boxTop)) { resizingRef.current = true; resizeEdgeRef.current = 'nw'; }
+    else if (near(mx, boxRight) && near(my, boxTop)) { resizingRef.current = true; resizeEdgeRef.current = 'ne'; }
+    else if (near(mx, boxLeft) && near(my, boxBottom)) { resizingRef.current = true; resizeEdgeRef.current = 'sw'; }
+    else if (near(mx, boxRight) && near(my, boxBottom)) { resizingRef.current = true; resizeEdgeRef.current = 'se'; }
+    else if (near(mx, boxLeft) && my > boxTop && my < boxBottom) { resizingRef.current = true; resizeEdgeRef.current = 'w'; }
+    else if (near(mx, boxRight) && my > boxTop && my < boxBottom) { resizingRef.current = true; resizeEdgeRef.current = 'e'; }
+    else if (near(my, boxTop) && mx > boxLeft && mx < boxRight) { resizingRef.current = true; resizeEdgeRef.current = 'n'; }
+    else if (near(my, boxBottom) && mx > boxLeft && mx < boxRight) { resizingRef.current = true; resizeEdgeRef.current = 's'; }
     else if (mx >= boxLeft && mx <= boxRight && my >= boxTop && my <= boxBottom) {
-      dragging.current = true;
-      dragger.current = { ox: mx - boxLeft, oy: my - boxTop };
+      draggingRef.current = true;
+      draggerRef.current = { ox: mx - boxLeft, oy: my - boxTop };
     }
   };
 
   useEffect(() => {
     const onMove = (e) => {
-      if (!dragging.current && !resizing.current) return;
+      if (!draggingRef.current && !resizingRef.current) return;
       if (e.touches) e.preventDefault();
       const rect = containerRef.current.getBoundingClientRect();
       const { cx, cy } = getClientXY(e);
@@ -162,15 +183,15 @@ export default function Crop() {
 
       let nx = cr.x, ny = cr.y, nw = cr.w, nh = cr.h;
 
-      if (dragging.current) {
-        nx = Math.round(to(mx - dx - dragger.current.ox));
-        ny = Math.round(to(my - dy - dragger.current.oy));
+      if (draggingRef.current) {
+        nx = Math.round(to(mx - dx - draggerRef.current.ox));
+        ny = Math.round(to(my - dy - draggerRef.current.oy));
         nx = Math.max(0, Math.min(iw - nw, nx));
         ny = Math.max(0, Math.min(ih - nh, ny));
       }
 
-      if (resizing.current) {
-        const edge = resizeEdge.current;
+      if (resizingRef.current) {
+        const edge = resizeEdgeRef.current;
         if (edge.includes('w')) { const nl = Math.round(to(mx - dx)); nw = cr.x + cr.w - Math.max(0, Math.min(cr.x + cr.w - 10, nl)); nx = Math.max(0, Math.min(cr.x + cr.w - 10, nl)); }
         if (edge.includes('e')) nw = Math.max(10, Math.round(to(mx - dx)) - cr.x);
         if (edge.includes('n')) { const nt = Math.round(to(my - dy)); nh = cr.y + cr.h - Math.max(0, Math.min(cr.y + cr.h - 10, nt)); ny = Math.max(0, Math.min(cr.y + cr.h - 10, nt)); }
@@ -184,7 +205,7 @@ export default function Crop() {
       setCrop({ x: nx, y: ny, w: nw, h: nh });
     };
 
-    const onUp = () => { dragging.current = false; resizing.current = false; resizeEdge.current = null; };
+    const onUp = () => { draggingRef.current = false; resizingRef.current = false; resizeEdgeRef.current = null; };
 
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
