@@ -13,7 +13,7 @@ const cspHeader = [
   "base-uri 'self'",
   "form-action 'self'",
   "manifest-src 'self'",
-  "media-src 'none'",
+  "media-src 'self' blob:",
   "prefetch-src 'self'",
 ].join('; ');
 
