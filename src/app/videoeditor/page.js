@@ -42,7 +42,9 @@ export default function VideoEditor() {
             />
 
             <Timeline
-              videos={videos} images={images} duration={duration}
+              videos={videos} setVideos={setVideos}
+              images={images} setImages={setImages}
+              duration={duration}
               currentTime={currentTime} audioTracks={audioTracks}
               onSeek={(t) => setCurrentTime(t)}
             />

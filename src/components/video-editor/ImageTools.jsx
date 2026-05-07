@@ -1,6 +1,6 @@
 'use client';
 
-import { Image, Upload, Trash2 } from 'lucide-react';
+import { Image, Upload, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 
 export default function ImageTools({ images, setImages, currentTime, t }) {
   const handleUpload = (e) => {
@@ -35,6 +35,18 @@ export default function ImageTools({ images, setImages, currentTime, t }) {
     });
   };
 
+  const moveLayer = (id, direction) => {
+    setImages(prev => {
+      const idx = prev.findIndex(i => i.id === id);
+      if (idx === -1) return prev;
+      const newIdx = idx + direction;
+      if (newIdx < 0 || newIdx >= prev.length) return prev;
+      const copy = [...prev];
+      [copy[idx], copy[newIdx]] = [copy[newIdx], copy[idx]];
+      return copy;
+    });
+  };
+
   const formatTime = (s) => {
     const m = Math.floor(s / 60);
     const sec = Math.floor(s % 60);
@@ -61,13 +73,23 @@ export default function ImageTools({ images, setImages, currentTime, t }) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Image className="w-4 h-4 text-blue-500" strokeWidth={2} />
-                  <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 truncate max-w-[160px]">
+                  <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 truncate max-w-[120px]">
                     {img.file.name}
                   </span>
                 </div>
-                <button onClick={() => removeImage(img.id)} className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 transition-colors">
-                  <Trash2 className="w-4 h-4" strokeWidth={2} />
-                </button>
+                <div className="flex items-center gap-0.5">
+                  <button onClick={() => moveLayer(img.id, -1)} title="Send backward"
+                    className="p-1 rounded hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-400">
+                    <ArrowDown className="w-3 h-3" strokeWidth={2.5} />
+                  </button>
+                  <button onClick={() => moveLayer(img.id, 1)} title="Bring forward"
+                    className="p-1 rounded hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-400">
+                    <ArrowUp className="w-3 h-3" strokeWidth={2.5} />
+                  </button>
+                  <button onClick={() => removeImage(img.id)} className="p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 transition-colors">
+                    <Trash2 className="w-3.5 h-3.5" strokeWidth={2} />
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

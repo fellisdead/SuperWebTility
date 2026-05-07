@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Play, Pause, Download, Loader2, GripHorizontal } from 'lucide-react';
+import { Play, Pause, Download, Loader2 } from 'lucide-react';
 
 export default function PreviewCanvas({
   videos, activeVideo, setActiveVideo, images, setImages,
@@ -22,6 +22,15 @@ export default function PreviewCanvas({
   const CANVAS_H = 1080;
 
   const activeVid = videos[activeVideo] || null;
+
+  useEffect(() => {
+    videos.forEach((vid, i) => {
+      const v = videoRefs.current[i];
+      if (v && vid.volume !== undefined) {
+        v.volume = vid.volume;
+      }
+    });
+  }, [videos]);
 
   useEffect(() => {
     if (!activeVid) return;
@@ -64,9 +73,7 @@ export default function PreviewCanvas({
     videos.forEach((vid, i) => {
       if (i !== activeVideo) {
         const ov = videoRefs.current[i];
-        if (ov) {
-          ov.currentTime = currentTime;
-        }
+        if (ov) ov.currentTime = currentTime;
       }
     });
   }, [currentTime, activeVideo, videos]);
@@ -175,26 +182,39 @@ export default function PreviewCanvas({
     if (!activeVid) return;
 
     let hitImg = null;
-    let hitCorner = null;
+    let hitHandle = null;
     const t = videoRefs.current[activeVideo]?.currentTime || 0;
+    const HANDLE = 20;
 
     for (let i = images.length - 1; i >= 0; i--) {
       const img = images[i];
       if (img.startTime > 0 && t < img.startTime) continue;
       if (img.endTime > 0 && t > img.endTime) continue;
       const h = img.height || img.width;
-      const CORNER = 16;
-      if (pos.x >= img.x + img.width - CORNER && pos.x <= img.x + img.width + CORNER &&
-          pos.y >= img.y + h - CORNER && pos.y <= img.y + h + CORNER) {
-        hitImg = img; hitCorner = 'se'; break;
-      }
-      if (pos.x >= img.x && pos.x <= img.x + img.width && pos.y >= img.y && pos.y <= img.y + h) {
-        hitImg = img; hitCorner = null; break;
+      const mx = pos.x;
+      const my = pos.y;
+      const l = img.x;
+      const r = img.x + img.width;
+      const top = img.y;
+      const b = img.y + h;
+
+      const near = (v, t) => Math.abs(v - t) < HANDLE;
+
+      if (near(mx, l) && near(my, top)) { hitImg = img; hitHandle = 'nw'; break; }
+      if (near(mx, r) && near(my, top)) { hitImg = img; hitHandle = 'ne'; break; }
+      if (near(mx, l) && near(my, b)) { hitImg = img; hitHandle = 'sw'; break; }
+      if (near(mx, r) && near(my, b)) { hitImg = img; hitHandle = 'se'; break; }
+      if (near(mx, l) && my > top && my < b) { hitImg = img; hitHandle = 'w'; break; }
+      if (near(mx, r) && my > top && my < b) { hitImg = img; hitHandle = 'e'; break; }
+      if (near(my, top) && mx > l && mx < r) { hitImg = img; hitHandle = 'n'; break; }
+      if (near(my, b) && mx > l && mx < r) { hitImg = img; hitHandle = 's'; break; }
+      if (mx >= l && mx <= r && my >= top && my <= b) {
+        hitImg = img; hitHandle = 'move'; break;
       }
     }
 
-    if (hitCorner) {
-      setResizeState({ id: hitImg.id, startX: pos.x, startY: pos.y, startW: hitImg.width, startH: hitImg.height || (hitImg.width / 2) });
+    if (hitImg && hitHandle !== 'move') {
+      setResizeState({ id: hitImg.id, handle: hitHandle, sx: pos.x, sy: pos.y, sw: hitImg.width, sh: h, sox: hitImg.x, soy: hitImg.y });
     } else if (hitImg) {
       setDragState({ id: hitImg.id, ox: pos.x - hitImg.x, oy: pos.y - hitImg.y });
     }
@@ -210,11 +230,19 @@ export default function PreviewCanvas({
         ));
       }
       if (resizeState) {
+        const { id, handle, sx, sy, sw, sh, sox, soy } = resizeState;
         setImages(prev => prev.map(img => {
-          if (img.id !== resizeState.id) return img;
-          const nw = Math.max(30, resizeState.startW + (pos.x - resizeState.startX));
-          const nh = Math.max(30, resizeState.startH + (pos.y - resizeState.startY));
-          return { ...img, width: Math.round(nw), height: Math.round(nh) };
+          if (img.id !== id) return img;
+          let nx = sox, ny = soy, nw = sw, nh = sh;
+          const dx = pos.x - sx;
+          const dy = pos.y - sy;
+
+          if (handle.includes('e')) nw = Math.max(30, sw + dx);
+          if (handle.includes('w')) { nw = Math.max(30, sw - dx); nx = sox + sw - nw; }
+          if (handle.includes('s')) nh = Math.max(30, sh + dy);
+          if (handle.includes('n')) { nh = Math.max(30, sh - dy); ny = soy + sh - nh; }
+
+          return { ...img, x: Math.round(nx), y: Math.round(ny), width: Math.round(nw), height: Math.round(nh) };
         }));
       }
     };
@@ -249,10 +277,7 @@ export default function PreviewCanvas({
       setPlaying(true);
       recorder.start();
 
-      setTimeout(() => {
-        recorder.stop();
-        setPlaying(false);
-    }, exportDur * 1000);
+      setTimeout(() => { recorder.stop(); setPlaying(false); }, exportDur * 1000);
 
       const blob = await blobPromise;
       const url = URL.createObjectURL(blob);
@@ -266,7 +291,9 @@ export default function PreviewCanvas({
       console.error('Export failed:', err);
     }
     setExporting(false);
-};
+  };
+
+  const cursorStyle = resizeState ? 'nwse-resize' : dragState ? 'grabbing' : 'crosshair';
 
   return (
     <div className="space-y-3">
@@ -276,7 +303,7 @@ export default function PreviewCanvas({
             <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H}
               className="w-full h-full object-contain"
               onMouseDown={handleCanvasMouseDown}
-              style={{ cursor: dragState ? 'grabbing' : resizeState ? 'nwse-resize' : 'default' }}
+              style={{ cursor: cursorStyle }}
             />
             {videos.map((vid, i) => (
               <video key={i}
@@ -309,22 +336,17 @@ export default function PreviewCanvas({
               <Pause className="w-4 h-4 text-white" fill="white" strokeWidth={1.5} />
             </button>
           )}
-          <button
-            onClick={handleExport}
-            disabled={!activeVid || exporting}
-            className="p-2 rounded-full bg-black/60 hover:bg-black/80 transition-colors disabled:opacity-50 ml-auto"
-          >
+          <button onClick={handleExport} disabled={!activeVid || exporting}
+            className="p-2 rounded-full bg-black/60 hover:bg-black/80 transition-colors disabled:opacity-50 ml-auto">
             {exporting ? <Loader2 className="w-4 h-4 text-white animate-spin" strokeWidth={2} /> : <Download className="w-4 h-4 text-white" strokeWidth={2} />}
           </button>
         </div>
 
         {videos.length > 1 && (
-          <div className="absolute top-3 left-3 flex gap-1.5">
+          <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
             {videos.map((vid, i) => (
-              <button key={i}
-                onClick={() => setActiveVideo(i)}
-                className={`px-2 py-1 text-[10px] font-bold rounded-lg transition-colors ${i === activeVideo ? 'bg-purple-500 text-white' : 'bg-black/50 text-gray-300 hover:bg-black/70'}`}
-              >
+              <button key={i} onClick={() => setActiveVideo(i)}
+                className={`px-2 py-1 text-[10px] font-bold rounded-lg transition-colors ${i === activeVideo ? 'bg-purple-500 text-white' : 'bg-black/50 text-gray-300 hover:bg-black/70'}`}>
                 {vid.file.name.length > 8 ? vid.file.name.slice(0, 8) + '…' : vid.file.name}
               </button>
             ))}

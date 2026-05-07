@@ -1,6 +1,6 @@
 'use client';
 
-import { Upload, Trash2, Video } from 'lucide-react';
+import { Upload, Trash2, Video, Volume2 } from 'lucide-react';
 
 export default function VideoTools({ videos, setVideos, activeVideo, setActiveVideo, t }) {
   const handleUpload = (e) => {
@@ -13,6 +13,7 @@ export default function VideoTools({ videos, setVideos, activeVideo, setActiveVi
         url: URL.createObjectURL(f),
         trimStart: 0,
         trimEnd: 0,
+        volume: 1,
       }));
     if (newVids.length > 0) {
       setVideos(prev => {
@@ -35,6 +36,10 @@ export default function VideoTools({ videos, setVideos, activeVideo, setActiveVi
     });
   };
 
+  const updateVideo = (id, prop, value) => {
+    setVideos(prev => prev.map(v => v.id === id ? { ...v, [prop]: value } : v));
+  };
+
   return (
     <div className="space-y-5">
       <label className="flex items-center justify-center gap-2 w-full p-5 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-2xl cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
@@ -52,10 +57,10 @@ export default function VideoTools({ videos, setVideos, activeVideo, setActiveVi
               onClick={() => setActiveVideo(i)}
               className={`p-3 rounded-2xl cursor-pointer transition-colors ${i === activeVideo ? 'bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-400' : 'bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700'}`}
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Video className="w-4 h-4 text-purple-500" strokeWidth={2} />
-                  <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 truncate max-w-[160px]">
+                  <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 truncate max-w-[140px]">
                     {vid.file.name}
                   </span>
                 </div>
@@ -65,6 +70,13 @@ export default function VideoTools({ videos, setVideos, activeVideo, setActiveVi
                 >
                   <Trash2 className="w-4 h-4" strokeWidth={2} />
                 </button>
+              </div>
+              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                <Volume2 className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" strokeWidth={2} />
+                <input type="range" min={0} max={100} value={Math.round((vid.volume ?? 1) * 100)}
+                  onChange={e => updateVideo(vid.id, 'volume', +e.target.value / 100)}
+                  className="w-full accent-purple-500 h-1.5" />
+                <span className="text-[10px] font-semibold text-gray-400 w-8 text-right">{Math.round((vid.volume ?? 1) * 100)}%</span>
               </div>
             </div>
           ))}
