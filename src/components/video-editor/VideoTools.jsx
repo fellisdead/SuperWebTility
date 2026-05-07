@@ -1,88 +1,73 @@
 'use client';
 
-import { Upload, Scissors, Video } from 'lucide-react';
+import { Upload, Trash2, Video } from 'lucide-react';
 
-export default function VideoTools({ video, setVideo, trimStart, setTrimStart, trimEnd, setTrimEnd, currentTime, duration, t }) {
+export default function VideoTools({ videos, setVideos, activeVideo, setActiveVideo, t }) {
   const handleUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (!file || !file.type.startsWith('video/')) return;
-    if (video) URL.revokeObjectURL(video.url);
-    setVideo({
-      file,
-      url: URL.createObjectURL(file),
-    });
-    setTrimStart(0);
-    setTrimEnd(0);
+    const files = Array.from(e.target.files || []);
+    const newVids = files
+      .filter(f => f.type.startsWith('video/'))
+      .map(f => ({
+        id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+        file: f,
+        url: URL.createObjectURL(f),
+        trimStart: 0,
+        trimEnd: 0,
+      }));
+    if (newVids.length > 0) {
+      setVideos(prev => {
+        const next = [...prev, ...newVids];
+        if (prev.length === 0) setActiveVideo(0);
+        return next;
+      });
+    }
     e.target.value = '';
   };
 
-  const clearVideo = () => {
-    if (video) URL.revokeObjectURL(video.url);
-    setVideo(null);
-    setTrimStart(0);
-    setTrimEnd(0);
-  };
-
-  const formatTime = (s) => {
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
-    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  const removeVideo = (id) => {
+    setVideos(prev => {
+      const idx = prev.findIndex(v => v.id === id);
+      const v = prev[idx];
+      if (v) URL.revokeObjectURL(v.url);
+      const next = prev.filter(v => v.id !== id);
+      if (activeVideo >= next.length) setActiveVideo(Math.max(0, next.length - 1));
+      return next;
+    });
   };
 
   return (
     <div className="space-y-5">
-      {!video ? (
-        <label className="flex items-center justify-center gap-2 w-full p-5 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-2xl cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
-          <Upload className="w-5 h-5 text-gray-400" strokeWidth={2} />
-          <span className="text-sm font-semibold text-gray-500 dark:text-slate-400">{t.veUploadVideo}</span>
-          <input type="file" accept="video/*" className="hidden" onChange={handleUpload} />
-        </label>
-      ) : (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-900 rounded-2xl">
-            <div className="flex items-center gap-2">
-              <Video className="w-4 h-4 text-purple-500" strokeWidth={2} />
-              <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 truncate max-w-[200px]">
-                {video.file.name}
-              </span>
-            </div>
-            <button onClick={clearVideo} className="text-xs font-semibold text-red-500 hover:text-red-700 transition-colors">
-              {t.veRemove}
-            </button>
-          </div>
+      <label className="flex items-center justify-center gap-2 w-full p-5 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-2xl cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
+        <Upload className="w-5 h-5 text-gray-400" strokeWidth={2} />
+        <span className="text-sm font-semibold text-gray-500 dark:text-slate-400">{t.veUploadVideo}</span>
+        <input type="file" accept="video/*" multiple className="hidden" onChange={handleUpload} />
+      </label>
 
-          {duration > 0 && (
-            <div className="p-4 bg-gray-50 dark:bg-slate-900 rounded-2xl space-y-3">
-              <div className="flex items-center gap-2">
-                <Scissors className="w-4 h-4 text-purple-500" strokeWidth={2} />
-                <span className="text-sm font-bold text-gray-700 dark:text-slate-300">
-                  {t.veTrim}: {formatTime(trimStart)} &mdash; {formatTime(trimEnd || duration)}
-                </span>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{t.veStart} ({formatTime(trimStart)})</span>
-                  <button onClick={() => setTrimStart(currentTime)} className="text-[11px] font-bold text-purple-500 hover:text-purple-400">
-                    {t.veSetAt} {formatTime(currentTime)}
-                  </button>
+      {videos.length === 0 ? (
+        <p className="text-center text-sm text-gray-400 dark:text-slate-500">{t.veNoVideo}</p>
+      ) : (
+        <div className="space-y-3">
+          {videos.map((vid, i) => (
+            <div key={vid.id}
+              onClick={() => setActiveVideo(i)}
+              className={`p-3 rounded-2xl cursor-pointer transition-colors ${i === activeVideo ? 'bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-400' : 'bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-700'}`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Video className="w-4 h-4 text-purple-500" strokeWidth={2} />
+                  <span className="text-sm font-semibold text-gray-700 dark:text-slate-300 truncate max-w-[160px]">
+                    {vid.file.name}
+                  </span>
                 </div>
-                <input type="range" min={0} max={duration} step={0.1} value={trimStart}
-                  onChange={e => setTrimStart(Math.min(+e.target.value, trimEnd || duration))}
-                  className="w-full accent-purple-500" />
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{t.veEnd} ({formatTime(trimEnd || duration)})</span>
-                  <button onClick={() => setTrimEnd(currentTime)} className="text-[11px] font-bold text-purple-500 hover:text-purple-400">
-                    {t.veSetAt} {formatTime(currentTime)}
-                  </button>
-                </div>
-                <input type="range" min={trimStart || 0} max={duration} step={0.1} value={trimEnd || duration}
-                  onChange={e => setTrimEnd(+e.target.value)}
-                  className="w-full accent-purple-500" />
+                <button
+                  onClick={(e) => { e.stopPropagation(); removeVideo(vid.id); }}
+                  className="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" strokeWidth={2} />
+                </button>
               </div>
             </div>
-          )}
+          ))}
         </div>
       )}
     </div>
