@@ -4,21 +4,14 @@ import { useRef, useEffect } from 'react';
 import { Play, Pause } from 'lucide-react';
 
 export default function PreviewCanvas({
-  video,
-  images,
-  audioTracks,
-  playing,
-  setPlaying,
-  currentTime,
-  setCurrentTime,
-  setDuration,
-  trimStart,
-  trimEnd,
+  video, images, audioTracks, playing, setPlaying,
+  currentTime, setCurrentTime, setDuration, trimStart, trimEnd, t,
 }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const audioRefs = useRef([]);
   const rafRef = useRef(null);
+  const imgCache = useRef({});
 
   const CANVAS_W = 1920;
   const CANVAS_H = 1080;
@@ -34,7 +27,6 @@ export default function PreviewCanvas({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-
     if (playing) {
       v.play().catch(() => {});
     } else {
@@ -45,7 +37,6 @@ export default function PreviewCanvas({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-
     const onTime = () => {
       setCurrentTime(v.currentTime);
       if (trimEnd > 0 && v.currentTime >= trimEnd) {
@@ -68,17 +59,32 @@ export default function PreviewCanvas({
   }, [currentTime, video]);
 
   useEffect(() => {
+    const currentCache = imgCache.current;
+    const activeIds = new Set(images.map(i => i.id));
+
+    Object.keys(currentCache).forEach(id => {
+      if (!activeIds.has(id)) {
+        delete currentCache[id];
+      }
+    });
+
+    images.forEach(img => {
+      if (!currentCache[img.id]) {
+        const el = new Image();
+        el.src = img.url;
+        currentCache[img.id] = { el, url: img.url };
+      } else if (currentCache[img.id].url !== img.url) {
+        currentCache[img.id].el.src = img.url;
+        currentCache[img.id].url = img.url;
+      }
+    });
+  }, [images]);
+
+  useEffect(() => {
     if (!playing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-
-    const imagesList = images.filter(img => img.url);
-    const imagesPreloaded = imagesList.map(img => {
-      const el = document.createElement('img');
-      el.src = img.url;
-      return el;
-    });
 
     const draw = () => {
       const v = videoRef.current;
@@ -90,25 +96,23 @@ export default function PreviewCanvas({
       ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
       ctx.drawImage(v, 0, 0, CANVAS_W, CANVAS_H);
 
-      for (let i = 0; i < imagesPreloaded.length; i++) {
-        const img = imagesPreloaded[i];
-        const data = imagesList[i];
-        if (!img.complete || !img.naturalWidth) continue;
+      images.forEach(imgData => {
+        const cached = imgCache.current[imgData.id];
+        if (!cached) return;
+        const img = cached.el;
+        if (!img.complete || !img.naturalWidth) return;
 
-        ctx.globalAlpha = data.opacity;
-        const h = data.height || (data.width / img.naturalWidth) * img.naturalHeight;
-        ctx.drawImage(img, data.x, data.y, data.width, h);
+        ctx.globalAlpha = imgData.opacity;
+        const h = imgData.height || (imgData.width / img.naturalWidth) * img.naturalHeight;
+        ctx.drawImage(img, imgData.x, imgData.y, imgData.width, h);
         ctx.globalAlpha = 1;
-      }
+      });
 
       rafRef.current = requestAnimationFrame(draw);
     };
 
     draw();
-
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, [playing, images]);
 
   useEffect(() => {
@@ -172,7 +176,7 @@ export default function PreviewCanvas({
           <div className="absolute inset-0 flex items-center justify-center text-gray-500">
             <div className="text-center space-y-2">
               <div className="text-4xl opacity-30">16:9</div>
-              <p className="text-sm font-medium opacity-50">Upload a video to start</p>
+              <p className="text-sm font-medium opacity-50">{t.veNoVideo}</p>
             </div>
           </div>
         )}

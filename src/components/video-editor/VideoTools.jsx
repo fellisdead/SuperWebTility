@@ -2,7 +2,7 @@
 
 import { Upload, Scissors, Video } from 'lucide-react';
 
-export default function VideoTools({ video, setVideo, trimStart, setTrimStart, trimEnd, setTrimEnd, currentTime, duration }) {
+export default function VideoTools({ video, setVideo, trimStart, setTrimStart, trimEnd, setTrimEnd, currentTime, duration, t }) {
   const handleUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file || !file.type.startsWith('video/')) return;
@@ -34,7 +34,7 @@ export default function VideoTools({ video, setVideo, trimStart, setTrimStart, t
       {!video ? (
         <label className="flex items-center justify-center gap-2 w-full p-5 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-2xl cursor-pointer hover:border-purple-400 dark:hover:border-purple-500 transition-colors">
           <Upload className="w-5 h-5 text-gray-400" strokeWidth={2} />
-          <span className="text-sm font-semibold text-gray-500 dark:text-slate-400">Upload Video</span>
+          <span className="text-sm font-semibold text-gray-500 dark:text-slate-400">{t.veUploadVideo}</span>
           <input type="file" accept="video/*" className="hidden" onChange={handleUpload} />
         </label>
       ) : (
@@ -47,7 +47,7 @@ export default function VideoTools({ video, setVideo, trimStart, setTrimStart, t
               </span>
             </div>
             <button onClick={clearVideo} className="text-xs font-semibold text-red-500 hover:text-red-700 transition-colors">
-              Remove
+              {t.veRemove}
             </button>
           </div>
 
@@ -56,14 +56,14 @@ export default function VideoTools({ video, setVideo, trimStart, setTrimStart, t
               <div className="flex items-center gap-2">
                 <Scissors className="w-4 h-4 text-purple-500" strokeWidth={2} />
                 <span className="text-sm font-bold text-gray-700 dark:text-slate-300">
-                  Trim: {formatTime(trimStart)} &mdash; {formatTime(trimEnd || duration)}
+                  {t.veTrim}: {formatTime(trimStart)} &mdash; {formatTime(trimEnd || duration)}
                 </span>
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Start ({formatTime(trimStart)})</span>
+                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{t.veStart} ({formatTime(trimStart)})</span>
                   <button onClick={() => setTrimStart(currentTime)} className="text-[11px] font-bold text-purple-500 hover:text-purple-400">
-                    Set at {formatTime(currentTime)}
+                    {t.veSetAt} {formatTime(currentTime)}
                   </button>
                 </div>
                 <input type="range" min={0} max={duration} step={0.1} value={trimStart}
@@ -72,9 +72,9 @@ export default function VideoTools({ video, setVideo, trimStart, setTrimStart, t
               </div>
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">End ({formatTime(trimEnd || duration)})</span>
+                  <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{t.veEnd} ({formatTime(trimEnd || duration)})</span>
                   <button onClick={() => setTrimEnd(currentTime)} className="text-[11px] font-bold text-purple-500 hover:text-purple-400">
-                    Set at {formatTime(currentTime)}
+                    {t.veSetAt} {formatTime(currentTime)}
                   </button>
                 </div>
                 <input type="range" min={trimStart || 0} max={duration} step={0.1} value={trimEnd || duration}
