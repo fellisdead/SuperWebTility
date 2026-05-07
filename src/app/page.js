@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { RefreshCcw, UserMinus, Minimize2, Crop, Maximize2, TrendingUp, ScanEye, Stamp, FileCode } from 'lucide-react';
+import { RefreshCcw, UserMinus, Minimize2, Crop, Maximize2, TrendingUp, ScanEye, Stamp, FileCode, Clapperboard } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function Home() {
@@ -70,6 +70,13 @@ export default function Home() {
       desc: t.cardDesc13 || 'SVG ↔ Image converter', 
       icon: <FileCode className="w-12 h-12 sm:w-16 sm:h-16" strokeWidth={1.5} />, 
       href: '/svg2img' 
+    },
+    { 
+      id: 14, 
+      title: t.cardTitle14 || 'Video Editor', 
+      desc: t.cardDesc14 || 'Images + audio + trim', 
+      icon: <Clapperboard className="w-12 h-12 sm:w-16 sm:h-16" strokeWidth={1.5} />, 
+      href: '/videoeditor' 
     },
   ];
 

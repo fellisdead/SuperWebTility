@@ -80,6 +80,7 @@ const translations = {
     s2iImgSvgEmpty: "Upload an image to see the SVG code",
     s2iInvalidImg: "Failed to load image. Please try a different file.",
     cardTitle13: "SVG ↔ Image", cardDesc13: "SVG to image & vice versa",
+    cardTitle14: "Video Editor", cardDesc14: "Images + audio + trim",
     // Premium
     premiumTitle: "Supercharged Tools",
     premiumFree: "Free Plan",
@@ -170,6 +171,7 @@ const translations = {
     s2iImgSvgEmpty: "Sube una imagen para ver el código SVG",
     s2iInvalidImg: "Error al cargar la imagen. Prueba con otro archivo.",
     cardTitle13: "SVG ↔ Imagen", cardDesc13: "SVG a imagen y viceversa",
+    cardTitle14: "Editor de Video", cardDesc14: "Imágenes + audio + recorte",
     // Premium
     premiumTitle: "Herramientas Supercargadas",
     premiumFree: "Plan Gratuito",
@@ -260,6 +262,7 @@ const translations = {
     s2iImgSvgEmpty: "画像をアップロードしてSVGコードを表示",
     s2iInvalidImg: "画像の読み込みに失敗しました。別のファイルをお試しください。",
     cardTitle13: "SVG ↔ 画像", cardDesc13: "SVGから画像、その逆も",
+    cardTitle14: "動画編集", cardDesc14: "画像 + 音声 + トリム",
     // Premium
     premiumTitle: "強化ツール",
     premiumFree: "無料プラン",
